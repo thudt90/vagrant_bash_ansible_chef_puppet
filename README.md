@@ -1,27 +1,52 @@
 
 Create 4 machine base on vagrant
 
-sudo apt-get update
-sudo apt-get install apache2
-rm -rm /var/www # thu muc khi cai dat apache
-ln -fs /vagrant/ /var/www
+    sudo apt-get update
+    sudo apt-get install apache2
+    rm -rm /var/www # thu muc khi cai dat apache
+    ln -fs /vagrant/ /var/www
 
-Bai giai
+#Bai giai
 
-# create a new file index.html
-$ echo "<h1> Hello word! </h1>" > index.html
-$ mkdir -p /prosioner{bash,ansible,chef,puppet}
+ create a new file _index.html_ in _/vagrant/html/_
 
-Machine 1: using bash
-# in Vagrantfile: add
+    $ echo "<h1> Hello word! </h1>" > index.html
+    $ mkdir -p /prosioner/{bash,ansible,chef,puppet}
 
-  config.vm.define 'bash' do |bash|
-    bash.vm.net :private_network, ip: '192.168.33.111'
-  end
+# Machine 1: using bash
+In Vagrantfile: add
 
-$ touch /prosioner/bash/install-apache.sh
+    config.vm.define 'bash' do |bash|
+        bash.vm.net :private_network, ip: '192.168.33.111'
+    end
+
+    $ touch /prosioner/bash/install-apache.sh
 # Read 'install-apache.sh.
 
 Machine 2: using ansible
+# in Vagrantfile: add
+
+    ansible.vm.network :forwarded_port, guest: 80, host: 8081
+    config.vm.provision :ansible do |ans|
+      # where the playbook is location
+      ans.playbook = "provisioners/ansible/playbook.yml"
+    end
+
+=> playbook must in provision
+
+# Create folder
+ansible
+│   │   ├── group_vars
+│   │   ├── playbook.retry
+│   │   ├── playbook.yml
+│   │   └── roles
+│   │       └── apache
+│   │           └── tasks
+│   │               └── main.yml
+
+# Watch _playbook.yml_ and _main.yml_
+
+
+
 Machine 3: using chef
 Machine 4: using puppet

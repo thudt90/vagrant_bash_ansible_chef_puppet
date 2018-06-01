@@ -1,0 +1,21 @@
+---
+
+- name: Update
+  apt:
+    name: apache2
+    update_cache: yes
+
+- name: delete apache2 directory
+# _file_ is module we need
+  file:
+    path: /var/www
+  # _absent_ is delete directory
+    state: absent
+
+- name: link file /vagrant/html/index
+# _file_ is module we need
+  file:
+    src: /vagrant
+    dest: /var/www
+    # _link_ is link directory
+    state: link

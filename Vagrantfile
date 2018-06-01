@@ -15,7 +15,13 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define :ansible do |ansible|
-    ansible.vm.net :private_network, ip: '192.168.33.112'
+    #ansible.vm.net :private_network, ip: '192.168.33.112'
+    ansible.vm.network :forwarded_port, guest: 80, host: 8081
+
+    config.vm.provision :ansible do |ans|
+      # where the playbook is location
+      ans.playbook = "provisioners/ansible/playbook.yml"
+    end
   end
 
   config.vm.define :chef do |chef|
