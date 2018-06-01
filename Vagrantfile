@@ -35,6 +35,18 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define :puppet do |puppet|
-    puppet.vm.net :private_network, ip: '192.168.33.114'
+    # puppet.vm.net :private_network, ip: '192.168.33.114'
+    puppet.vm.network :forwarded_port, guest: 80, host: 8082
+
+    puppet.vm.provision :shell, :inline => <<-SHELL
+      apt-get update
+      apt-get install -y puppet
+    SHELL
+
+    puppet.vm.provision :puppet do |pup_app|
+      # where the playbook is location
+      pup_app.manifests_path = 'provisioners/puppet/manifests'
+      pup_app.manifest_file = 'apache.pp'
+    end
   end
 end
