@@ -49,4 +49,24 @@ ansible
 
 
 Machine 3: using chef
+# in Vagrantfile: add
+
+  config.vm.define :chef do |chef|
+    # chef.vm.net :private_network, ip: '192.168.33.113'
+    chef.vm.network :forwarded_port, guest: 80, host: 8082
+    chef.vm.provision :chef_solo do |chef_app|
+      # where the chef is location
+      chef_app.cookbooks_path = 'provisioners/chef/cookbooks'
+      chef_app.add_recipe 'apache'
+    end
+  end
+
+# Create folder
+chef
+│   │   └── cookbooks
+│   │       └── apache
+│   │           └── recipes
+│   │               └── default.rb
+
+
 Machine 4: using puppet

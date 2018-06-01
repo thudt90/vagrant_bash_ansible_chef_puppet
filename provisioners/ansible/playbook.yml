@@ -3,4 +3,5 @@
 - hosts: all
   become: true
   roles:
+  # _apache_ is folder's name in roles
     - apache
